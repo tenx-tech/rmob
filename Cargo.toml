@@ -1,0 +1,8 @@
+[package]
+name = "rmob"
+version = "0.1.0"
+authors = ["Florian Peter <florian.peter@gmx.at>"]
+edition = "2018"
+
+[dependencies]
+clap = "2.32.0"
