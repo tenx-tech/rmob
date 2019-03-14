@@ -2,11 +2,12 @@ extern crate clap;
 
 use clap::{App, Arg, SubCommand};
 use std::fs;
+use std::io;
 use std::os::unix::fs::OpenOptionsExt;
 use std::path::Path;
 use std::process::Command;
 
-fn main() {
+fn main() -> Result<(), io::Error> {
     let matches = App::new("Rmob")
         .version("0.1.0")
         .author("TenX Team <team@tenx.tech>")
@@ -31,39 +32,40 @@ fn main() {
     if let Some(matches) = matches.subcommand_matches("prepare-commit-msg") {
         let commit_message_file = matches.value_of("COMMIT_MESSAGE_FILE").unwrap();
         inject_into_commit_message_file(commit_message_file);
-    }
-
-    if let Some(matches) = matches.subcommand_matches("init") {
+    } else if let Some(_) = matches.subcommand_matches("init") {
         // TODO: Find the path to the top-level git hooks dir from anywhere, use libgit2?
         let hook_file = ".git/hooks/prepare-commit-msg";
 
         if Path::new(hook_file).exists() {
             println!("You have an existing prepare-commit-msg hook, which we need to overwrite. Please back it up and remove it!");
         } else {
-            create_hook(hook_file);
+            create_hook(hook_file)?;
         }
     }
+
+    Ok(())
 }
 
-fn create_hook(hook_file: &str) {
+fn create_hook(hook_file: &str) -> Result<(), io::Error> {
     let hook_code = "#!/bin/bash
 
 rmob prepare-commit-msg \"$1\"";
 
-    write_executable(hook_file, hook_code);
+    write_executable(hook_file, hook_code)?;
 
     println!("Success!");
+    Ok(())
 }
 
 // TODO: Make OS-agnostic
-fn write_executable(file: &str, contents: &str) {
+fn write_executable(file: &str, contents: &str) -> Result<(), io::Error> {
     fs::OpenOptions::new()
         .create(true)
         .write(true)
         .mode(0o775)
         .open(file)
         .unwrap();
-    fs::write(file, contents).expect("Failed to write git hook");
+    fs::write(file, contents)
 }
 
 fn inject_into_commit_message_file(commit_message_file: &str) {
