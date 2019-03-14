@@ -6,8 +6,9 @@ use std::io;
 use std::os::unix::fs::OpenOptionsExt;
 use std::path::Path;
 use std::process::Command;
+use std::error::Error;
 
-fn main() -> Result<(), io::Error> {
+fn main() -> Result<(), Box<dyn Error>> {
     let matches = App::new("Rmob")
         .version("0.1.0")
         .author("TenX Team <team@tenx.tech>")
@@ -37,7 +38,8 @@ fn main() -> Result<(), io::Error> {
         let hook_file = ".git/hooks/prepare-commit-msg";
 
         if Path::new(hook_file).exists() {
-            println!("You have an existing prepare-commit-msg hook, which we need to overwrite. Please back it up and remove it!");
+            // TODO: Want to bail! here, do I need a custom error type for that?
+            panic!("You have an existing prepare-commit-msg hook, which we need to overwrite. Please back it up and remove it!");
         } else {
             create_hook(hook_file)?;
         }
