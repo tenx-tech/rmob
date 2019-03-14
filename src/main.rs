@@ -67,8 +67,7 @@ fn write_executable(file: &str, contents: &str) -> io::Result<()> {
         .create(true)
         .write(true)
         .mode(0o775)
-        .open(file)
-        .unwrap();
+        .open(file)?;
     fs::write(file, contents)
 }
 
