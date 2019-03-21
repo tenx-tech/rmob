@@ -1,6 +1,6 @@
 use assert_cmd::prelude::*;
 use git2::Repository;
-use rmob;
+use rmob::*;
 use std::error::Error;
 use std::process::Command;
 use tempfile::tempdir;
@@ -12,7 +12,8 @@ fn it_works() -> Result<(), Box<dyn Error>> {
 
     let mut rmob = Command::cargo_bin("rmob")?;
     rmob.current_dir(dir.path()).arg("init").assert().success();
-    //  rmob.arg(""
+    let hook = dir.path().join(".git/hooks/").join(HOOK_NAME);
+    assert!(hook.exists());
 
     Ok(())
 }

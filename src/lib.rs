@@ -4,6 +4,8 @@ use std::os::unix::fs::OpenOptionsExt;
 use std::io;
 use std::error::Error;
 
+pub const HOOK_NAME: &str = "prepare-commit-msg";
+
 pub type BoxResult = Result<(), Box<dyn Error>>;
 
 pub fn create_hook(hook_file: &str) -> io::Result<()> {
@@ -36,7 +38,7 @@ pub fn inject_into_commit_message_file(commit_message_file: &str) -> BoxResult {
     if !mob_cmd_output.status.success() {
         return Err(Box::from(String::from_utf8_lossy(&mob_cmd_output.stderr).into_owned()));
     }
-    
+
     let mob = String::from_utf8_lossy(&mob_cmd_output.stdout);
     let comment_pos = commit_message.find("# ").ok_or("No comments found in yer commit, landlover.")?;
     let (git_message, git_comments) = commit_message.split_at(comment_pos);

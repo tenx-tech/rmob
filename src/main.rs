@@ -5,6 +5,7 @@ use std::path::Path;
 
 use rmob::*;
 
+
 fn main() -> BoxResult {
     let matches = App::new("Rmob")
         .version("0.1.0")
