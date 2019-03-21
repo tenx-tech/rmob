@@ -5,7 +5,8 @@ use std::path::Path;
 
 use rmob::*;
 
-fn main() {
+
+fn main() -> BoxResult {
     let matches = App::new("Rmob")
         .version("0.1.0")
         .author("TenX Team <team@tenx.tech>")
@@ -29,18 +30,19 @@ fn main() {
 
     if let Some(matches) = matches.subcommand_matches("prepare-commit-msg") {
         let commit_message_file = matches.value_of("COMMIT_MESSAGE_FILE").unwrap();
-        inject_into_commit_message_file(commit_message_file);
-    }
-
-    if let Some(matches) = matches.subcommand_matches("init") {
+        inject_into_commit_message_file(commit_message_file)?;
+    } else if let Some(_) = matches.subcommand_matches("init") {
         // TODO: Find the path to the top-level git hooks dir from anywhere, use libgit2?
         let hook_file = ".git/hooks/prepare-commit-msg";
 
         if Path::new(hook_file).exists() {
-            println!("You have an existing prepare-commit-msg hook, which we need to overwrite. Please back it up and remove it!");
+            // TODO: Want to bail! here, do I need a custom error type for that?
+            panic!("You have an existing prepare-commit-msg hook, which we need to overwrite. Please back it up and remove it!");
         } else {
-            create_hook(hook_file);
+            create_hook(hook_file)?;
         }
     }
+
+    Ok(())
 }
 
