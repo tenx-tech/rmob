@@ -17,7 +17,7 @@ pub fn init() -> BoxResult {
         create_hook(hook_file)?;
     }
 
-    if ! Path::new(template_file).exists() {
+    if !Path::new(template_file).exists() {
         fs::write(template_file, "")?;
     }
 
