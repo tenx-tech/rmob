@@ -53,14 +53,7 @@ fn add_and_commit(repo: &Repository, path: &Path, message: &str) -> Result<Oid, 
     let oid = index.write_tree()?;
     let signature = Signature::now("Mister Sinister", "mister@sinister.net")?;
     let tree = repo.find_tree(oid)?;
-    repo.commit(
-        Some("HEAD"), //  point HEAD to our new commit
-        &signature,   // author
-        &signature,   // committer
-        message,      // commit message
-        &tree,        // tree
-        &[],
-    ) // parents
+    repo.commit(Some("HEAD"), &signature, &signature, message, &tree, &[])
 }
 
 fn find_last_commit(repo: &Repository) -> Result<Commit, git2::Error> {
