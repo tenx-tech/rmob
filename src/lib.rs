@@ -1,11 +1,11 @@
 use std::error::Error;
 use std::fs;
-use std::io;
-use std::os::unix::fs::OpenOptionsExt;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 use std::process::Command;
 
 use structopt::StructOpt;
+
+mod init;
 
 pub const HOOK_NAME: &str = "prepare-commit-msg";
 
@@ -29,7 +29,7 @@ pub fn run() -> BoxResult {
     let rmob = Rmob::from_args();
 
     match rmob {
-        Rmob::Init {} => init()?,
+        Rmob::Init {} => init::init()?,
         Rmob::PrepareCommitMessage {
             commit_message_file,
         } => {
@@ -42,41 +42,6 @@ pub fn run() -> BoxResult {
     }
 
     Ok(())
-}
-
-fn init() -> BoxResult {
-    // TODO: Find the path to the top-level git hooks dir from anywhere, use libgit2?
-    let hook_file = format!(".git/hooks/{}", HOOK_NAME);
-
-    if Path::new(&hook_file).exists() {
-        // TODO: Want to bail! here, do I need a custom error type for that?
-        panic!("You have an existing prepare-commit-msg hook, which we need to overwrite. Please back it up and remove it!");
-    } else {
-        create_hook(&hook_file)?;
-    }
-
-    Ok(())
-}
-
-pub fn create_hook(hook_file: &str) -> io::Result<()> {
-    let hook_code = "#!/bin/bash
-
-rmob prepare-commit-msg \"$1\"";
-
-    write_executable(hook_file, hook_code)?;
-
-    println!("Success!");
-    Ok(())
-}
-
-// TODO: Make OS-agnostic
-pub fn write_executable(file: &str, contents: &str) -> io::Result<()> {
-    fs::OpenOptions::new()
-        .create(true)
-        .write(true)
-        .mode(0o775)
-        .open(file)?;
-    fs::write(file, contents)
 }
 
 pub fn inject_into_commit_message_file(commit_message_file: &str) -> BoxResult {
