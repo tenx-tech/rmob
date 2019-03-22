@@ -8,12 +8,17 @@ use std::{fs, io};
 pub fn init() -> BoxResult {
     // TODO: Find the path to the top-level git hooks dir from anywhere, use libgit2?
     let hook_file = ".git/hooks/prepare-commit-msg";
+    let template_file = ".git/.git-rmob-template";
 
     if Path::new(hook_file).exists() {
         // TODO: Want to bail! here, do I need a custom error type for that?
         panic!("You have an existing prepare-commit-msg hook, which we need to overwrite. Please back it up and remove it!");
     } else {
         create_hook(hook_file)?;
+    }
+
+    if ! Path::new(template_file).exists() {
+        fs::write(template_file, "")?;
     }
 
     Ok(())
