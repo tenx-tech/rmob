@@ -15,7 +15,7 @@ fn it_works() -> BoxResult {
 
     // TODO: Set up rmob and expect those co-pirates
 
-    assert_plain_commit_message_contains_coauthors(dir, &repo)?;
+    assert_plain_commit_message_contains_coauthors(&dir, &repo)?;
 
     // TODO: Test commit message with hashes
 
@@ -31,7 +31,7 @@ fn init(dir: &TempDir) -> BoxResult {
     Ok(())
 }
 
-fn assert_plain_commit_message_contains_coauthors(dir: TempDir, repo: &Repository) -> BoxResult {
+fn assert_plain_commit_message_contains_coauthors(dir: &TempDir, repo: &Repository) -> BoxResult {
     let arr_file = dir.path().join("arrfile");
     fs::write(&arr_file, "arr")?;
     add_and_commit(&repo, Path::new("arrfile"), "Arrrrrr!")?;
