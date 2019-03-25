@@ -39,13 +39,13 @@ pub fn run() -> BoxResult {
         inject_into_commit_message_file(commit_message_file)?;
     } else if let Some(_) = matches.subcommand_matches("init") {
         // TODO: Find the path to the top-level git hooks dir from anywhere, use libgit2?
-        let hook_file = ".git/hooks/prepare-commit-msg";
+        let hook_file = format!(".git/hooks/{}", HOOK_NAME);
 
-        if Path::new(hook_file).exists() {
+        if Path::new(&hook_file).exists() {
             // TODO: Want to bail! here, do I need a custom error type for that?
             panic!("You have an existing prepare-commit-msg hook, which we need to overwrite. Please back it up and remove it!");
         } else {
-            create_hook(hook_file)?;
+            create_hook(&hook_file)?;
         }
     }
 
