@@ -4,6 +4,8 @@ use std::os::unix::fs::OpenOptionsExt;
 use std::io;
 use std::error::Error;
 
+pub const HOOK_NAME: &str = "prepare-commit-msg";
+
 pub type BoxResult = Result<(), Box<dyn Error>>;
 
 pub fn create_hook(hook_file: &str) -> io::Result<()> {
@@ -29,13 +31,16 @@ pub fn write_executable(file: &str, contents: &str) -> io::Result<()> {
 
 pub fn inject_into_commit_message_file(commit_message_file: &str) -> BoxResult {
     let commit_message = fs::read_to_string(commit_message_file)?;
-    let mob_cmd = Command::new("git")
+    let mob_cmd_output = Command::new("git")
         .arg("mob-print")
-        .output()?
-        .clone()
-        .stdout;
-    let mob = String::from_utf8_lossy(&mob_cmd);
-    let comment_pos = commit_message.find("# ").unwrap();
+        .output()?;
+
+    if !mob_cmd_output.status.success() {
+        return Err(Box::from(String::from_utf8_lossy(&mob_cmd_output.stderr).into_owned()));
+    }
+
+    let mob = String::from_utf8_lossy(&mob_cmd_output.stdout);
+    let comment_pos = commit_message.find("# ").ok_or("No comments found in yer commit, landlover.")?;
     let (git_message, git_comments) = commit_message.split_at(comment_pos);
     let updated_message = format!("{}{}{}", git_message, mob, git_comments);
     fs::write(commit_message_file, updated_message)?;

@@ -29,7 +29,7 @@ fn main() -> BoxResult {
         .get_matches();
 
     if let Some(matches) = matches.subcommand_matches("prepare-commit-msg") {
-        let commit_message_file = matches.value_of("COMMIT_MESSAGE_FILE").unwrap();
+        let commit_message_file = matches.value_of("COMMIT_MESSAGE_FILE").ok_or("Git hook passed a weird param")?;
         inject_into_commit_message_file(commit_message_file)?;
     } else if let Some(_) = matches.subcommand_matches("init") {
         // TODO: Find the path to the top-level git hooks dir from anywhere, use libgit2?
