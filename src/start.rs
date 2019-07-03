@@ -30,18 +30,28 @@ pub fn start(copirates: &[String]) -> BoxResult {
 
     fail_if_pirate_not_present(copirates, &existing_copirates)?;
 
-    // TODO Add existing copirates to .git/.git-rmob-template
-    fs::write(ACTIVE_COPIRATES_FILE, "")?;
+    empty_copirates_file()?;
 
+    save_copirates(copirates, existing_copirates)?;
+
+    Ok(())
+}
+
+fn save_copirates(copirates: &[String], existing_copirates: CoPirates) -> BoxResult {
     let mut file = OpenOptions::new()
         .append(true)
         .open(ACTIVE_COPIRATES_FILE)
         .unwrap();
-
     for pirate in copirates {
         let existing_pirate = existing_copirates.copirates.get(pirate).ok_or("Wait what Sally it was right there?")?;
         writeln!(file, "Co-authored-by: {} <{}>", existing_pirate.name, existing_pirate.email)?;
     }
+
+    Ok(())
+}
+
+fn empty_copirates_file() -> BoxResult {
+    fs::write(ACTIVE_COPIRATES_FILE, "")?;
 
     Ok(())
 }
