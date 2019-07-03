@@ -23,7 +23,7 @@ struct CoPirates {
     copirates: HashMap<String, CoPirate>,
 }
 
-pub fn start(copirates: &[String]) -> BoxResult {
+pub fn sail(copirates: &[String]) -> BoxResult {
     let ship = dirs::home_dir().ok_or("Could not find yer ship oy!")?;
     let raw_copirates = fs::read_to_string(ship.join(COPIRATES_FILE))?;
     let existing_copirates: CoPirates = serde_json::from_str(&raw_copirates[..])?;

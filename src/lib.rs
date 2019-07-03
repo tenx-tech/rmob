@@ -5,7 +5,7 @@ use structopt::StructOpt;
 
 mod init;
 mod prepare_commit_msg;
-mod start;
+mod sail;
 mod solo;
 
 pub const HOOK_NAME: &str = "prepare-commit-msg";
@@ -22,8 +22,8 @@ enum Rmob {
     Init {},
     /// Start pairin' or mobbin' by passin' a list of yer co-pirates te sail wit'
     // TODO: Accept only two-character input
-    #[structopt(name = "start")]
-    Start { copirates: Vec<String> },
+    #[structopt(name = "sail")]
+    Sail { copirates: Vec<String> },
     /// Sail solo
     #[structopt(name = "solo")]
     Solo {},
@@ -40,7 +40,7 @@ pub fn run() -> BoxResult {
 
     match rmob {
         Rmob::Init {} => init::init()?,
-        Rmob::Start { copirates } => start::start(&copirates)?,
+        Rmob::Sail { copirates } => sail::sail(&copirates)?,
         Rmob::Solo {} => solo::solo()?,
         Rmob::PrepareCommitMessage {
             commit_message_file,
