@@ -6,6 +6,7 @@ use structopt::StructOpt;
 mod init;
 mod prepare_commit_msg;
 mod start;
+mod solo;
 
 pub const HOOK_NAME: &str = "prepare-commit-msg";
 pub const COPIRATES_FILE: &str = ".git-copirates";
@@ -23,6 +24,9 @@ enum Rmob {
     // TODO: Accept only two-character input
     #[structopt(name = "start")]
     Start { copirates: Vec<String> },
+    /// Sail solo
+    #[structopt(name = "solo")]
+    Solo {},
     /// Called from the git hook only
     #[structopt(name = "prepare-commit-msg")]
     PrepareCommitMessage {
@@ -37,6 +41,7 @@ pub fn run() -> BoxResult {
     match rmob {
         Rmob::Init {} => init::init()?,
         Rmob::Start { copirates } => start::start(&copirates)?,
+        Rmob::Solo {} => solo::solo()?,
         Rmob::PrepareCommitMessage {
             commit_message_file,
         } => {
