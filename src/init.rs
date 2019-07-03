@@ -1,6 +1,6 @@
 //! init sub-command
 
-use crate::BoxResult;
+use crate::{BoxResult, ACTIVE_COPIRATES_FILE};
 use std::os::unix::fs::OpenOptionsExt;
 use std::path::Path;
 use std::{fs, io};
@@ -8,7 +8,7 @@ use std::{fs, io};
 pub fn init() -> BoxResult {
     // TODO: Find the path to the top-level git hooks dir from anywhere, use libgit2?
     let hook_file = ".git/hooks/prepare-commit-msg";
-    let template_file = ".git/.git-rmob-template";
+    let template_file = ACTIVE_COPIRATES_FILE;
 
     if Path::new(hook_file).exists() {
         // TODO: Want to bail! here, do I need a custom error type for that?

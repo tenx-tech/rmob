@@ -9,6 +9,7 @@ mod start;
 
 pub const HOOK_NAME: &str = "prepare-commit-msg";
 pub const COPIRATES_FILE: &str = ".git-copirates";
+pub const ACTIVE_COPIRATES_FILE: &str = ".git/.git-rmob-template";
 
 pub type BoxResult = Result<(), Box<dyn Error>>;
 
