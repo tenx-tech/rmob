@@ -1,11 +1,12 @@
 [package]
 name = "rmob"
 version = "0.1.0"
-authors = ["Florian Peter <florian.peter@gmx.at>"]
+authors = ["Florian Peter <florian@tenx.tech>", "Eyal Kalderon <eyal.kalderon@tenx.tech"]
 edition = "2018"
+description = "Arr! Git mobbing in Rust"
 
 [dependencies]
 assert_cmd = "0.11.0"
-clap = "2.32.0"
 git2 = "0.8.0"
+structopt = "0.2.15"
 tempfile = "3.0.7"
