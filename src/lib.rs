@@ -1,12 +1,16 @@
 use std::error::Error;
-use std::path::PathBuf;
+use std::path::{PathBuf};
 
 use structopt::StructOpt;
 
 mod init;
 mod prepare_commit_msg;
+mod sail;
+mod solo;
 
 pub const HOOK_NAME: &str = "prepare-commit-msg";
+pub const COPIRATES_FILE: &str = ".git-copirates";
+pub const ACTIVE_COPIRATES_FILE: &str = ".git/.git-rmob-template";
 
 pub type BoxResult = Result<(), Box<dyn Error>>;
 
@@ -16,6 +20,13 @@ enum Rmob {
     /// Initialize rmob for this git repo, call this once to use rmob in your git repo
     #[structopt(name = "init")]
     Init {},
+    /// Start pairin' or mobbin' by passin' a list of yer co-pirates te sail wit'
+    // TODO: Accept only two-character input
+    #[structopt(name = "sail")]
+    Sail { copirates: Vec<String> },
+    /// Sail solo
+    #[structopt(name = "solo")]
+    Solo {},
     /// Called from the git hook only
     #[structopt(name = "prepare-commit-msg")]
     PrepareCommitMessage {
@@ -29,6 +40,8 @@ pub fn run() -> BoxResult {
 
     match rmob {
         Rmob::Init {} => init::init()?,
+        Rmob::Sail { copirates } => sail::sail(&copirates)?,
+        Rmob::Solo {} => solo::solo()?,
         Rmob::PrepareCommitMessage {
             commit_message_file,
         } => {
@@ -42,4 +55,3 @@ pub fn run() -> BoxResult {
 
     Ok(())
 }
-
