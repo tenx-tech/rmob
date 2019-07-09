@@ -3,7 +3,7 @@ use std::path::{PathBuf};
 
 use structopt::StructOpt;
 
-mod init;
+mod embark;
 mod prepare_commit_msg;
 mod sail;
 mod solo;
@@ -17,9 +17,9 @@ pub type BoxResult = Result<(), Box<dyn Error>>;
 #[derive(StructOpt, Clone, Debug)]
 #[structopt(name = "Rmob", version = "0.1.0", author = "")]
 enum Rmob {
-    /// Initialize rmob for this git repo, call this once to use rmob in your git repo
-    #[structopt(name = "init")]
-    Init {},
+    /// Embark on rmob fer this git repo, call this once t' use rmob in yer git repo
+    #[structopt(name = "embark")]
+    Embark {},
     /// Start pairin' or mobbin' by passin' a list of yer co-pirates te sail wit'
     // TODO: Accept only two-character input
     #[structopt(name = "sail")]
@@ -39,7 +39,7 @@ pub fn run() -> BoxResult {
     let rmob = Rmob::from_args();
 
     match rmob {
-        Rmob::Init {} => init::init()?,
+        Rmob::Embark {} => embark::embark()?,
         Rmob::Sail { copirates } => sail::sail(&copirates)?,
         Rmob::Solo {} => solo::solo()?,
         Rmob::PrepareCommitMessage {
