@@ -1,11 +1,11 @@
-//! init sub-command
+//! embark sub-command
 
 use crate::{BoxResult, ACTIVE_COPIRATES_FILE};
 use std::os::unix::fs::OpenOptionsExt;
 use std::path::Path;
 use std::{fs, io};
 
-pub fn init() -> BoxResult {
+pub fn embark() -> BoxResult {
     // TODO: Find the path to the top-level git hooks dir from anywhere, use libgit2?
     let hook_file = ".git/hooks/prepare-commit-msg";
     let template_file = ACTIVE_COPIRATES_FILE;
