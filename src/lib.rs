@@ -3,6 +3,7 @@ use std::path::{PathBuf};
 
 use structopt::StructOpt;
 
+mod copirate;
 mod embark;
 mod prepare_commit_msg;
 mod sail;
@@ -24,7 +25,7 @@ enum Rmob {
     // TODO: Accept only two-character input
     #[structopt(name = "sail")]
     Sail { copirates: Vec<String> },
-    /// Sail solo
+    /// Sail solo (short fer `rmob sail solo`)
     #[structopt(name = "solo")]
     Solo {},
     /// Called from the git hook only
@@ -40,7 +41,13 @@ pub fn run() -> BoxResult {
 
     match rmob {
         Rmob::Embark {} => embark::embark()?,
-        Rmob::Sail { copirates } => sail::sail(&copirates)?,
+        Rmob::Sail { copirates } => {
+            if copirates == ["solo"] {
+                solo::solo()?
+            } else {
+                sail::sail(&copirates)?
+            }
+        },
         Rmob::Solo {} => solo::solo()?,
         Rmob::PrepareCommitMessage {
             commit_message_file,

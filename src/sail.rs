@@ -1,27 +1,13 @@
 //! start sub-command
 
 extern crate dirs;
-extern crate serde;
-extern crate serde_json;
-
 use crate::{BoxResult, COPIRATES_FILE, ACTIVE_COPIRATES_FILE};
 
-use serde::Deserialize;
 use std::fs;
-use std::collections::{HashMap, HashSet};
+use std::collections::{HashSet};
 use std::fs::OpenOptions;
 use std::io::prelude::*;
-
-#[derive(Deserialize, Debug)]
-struct CoPirate {
-    name: String,
-    email: String,
-}
-
-#[derive(Deserialize, Debug)]
-struct CoPirates {
-    copirates: HashMap<String, CoPirate>,
-}
+use crate::copirate::CoPirates;
 
 pub fn sail(copirates: &[String]) -> BoxResult {
     let ship = dirs::home_dir().ok_or("Could not find yer ship oy!")?;
@@ -46,6 +32,8 @@ fn save_copirates(copirates: &[String], existing_copirates: CoPirates) -> BoxRes
         let existing_pirate = existing_copirates.copirates.get(pirate).ok_or("Wait what Sally it was right there?")?;
         writeln!(file, "Co-authored-by: {} <{}>", existing_pirate.name, existing_pirate.email)?;
     }
+
+    println!("{:?}", copirates);
 
     Ok(())
 }
