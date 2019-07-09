@@ -1,8 +1,6 @@
 use assert_cmd::prelude::*;
-use git2::{Commit, ObjectType, Oid, Repository, Signature};
+use git2::{Commit, ObjectType, Repository};
 use rmob::*;
-use std::fs;
-use std::path::Path;
 use std::process::Command;
 use tempfile::{tempdir, TempDir};
 
@@ -13,28 +11,44 @@ fn it_works() -> BoxResult {
 
     init(&dir)?;
 
-    // TODO: Set up rmob and expect those co-pirates
+    // TODO: stub ~/.git-copirates
+    sail(&dir)?;
 
-    assert_plain_commit_message_contains_coauthors(&dir, &repo)?;
+    init_git_repo(&dir)?;
 
-    // TODO: Test commit message with hashes
+    assert_oneliner_commit_message_contains_coauthors(&dir, &repo)?;
+
+    assert_multiline_commit_message_contains_coauthors(&dir, &repo)?;
+
 
     Ok(())
 }
 
 fn init(dir: &TempDir) -> BoxResult {
     let mut rmob = Command::cargo_bin("rmob")?;
-    rmob.current_dir(dir.path()).arg("init").assert().success();
+    rmob.current_dir(dir.path()).arg("embark").assert().success();
     let hook = dir.path().join(".git/hooks/").join(HOOK_NAME);
     assert!(hook.exists());
 
     Ok(())
 }
 
-fn assert_plain_commit_message_contains_coauthors(dir: &TempDir, repo: &Repository) -> BoxResult {
-    let arr_file = dir.path().join("arrfile");
-    fs::write(&arr_file, "arr")?;
-    add_and_commit(&repo, Path::new("arrfile"), "Arrrrrr!")?;
+fn sail(dir: &TempDir) -> BoxResult {
+    let mut rmob = Command::cargo_bin("rmob")?;
+    rmob.current_dir(dir.path()).arg("sail").arg("ek").assert().success();
+
+    Ok(())
+}
+
+fn init_git_repo(dir: &TempDir) -> BoxResult {
+    Command::new("git").current_dir(dir.path()).arg("init").assert().success();
+
+    Ok(())
+}
+
+fn assert_oneliner_commit_message_contains_coauthors(dir: &TempDir, repo: &Repository) -> BoxResult {
+    Command::new("git").current_dir(dir.path()).arg("commit").arg("-m").arg("Arrrrrr!").arg("--allow-empty").assert().success();
+
     let commit = find_last_commit(&repo)?;
     assert!(
         commit
@@ -47,13 +61,28 @@ fn assert_plain_commit_message_contains_coauthors(dir: &TempDir, repo: &Reposito
     Ok(())
 }
 
-fn add_and_commit(repo: &Repository, path: &Path, message: &str) -> Result<Oid, git2::Error> {
-    let mut index = repo.index()?;
-    index.add_path(path)?;
-    let oid = index.write_tree()?;
-    let signature = Signature::now("Mister Sinister", "mister@sinister.net")?;
-    let tree = repo.find_tree(oid)?;
-    repo.commit(Some("HEAD"), &signature, &signature, message, &tree, &[])
+fn assert_multiline_commit_message_contains_coauthors(dir: &TempDir, repo: &Repository) -> BoxResult {
+    const MULTILINE_MESSAGE: &str = r#"
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch integration-test
+# Changes not staged for commit:
+#	modified:   tests/integration_tests.rs
+#
+    "#;
+    Command::new("git").current_dir(dir.path()).arg("commit").arg("-m").arg(MULTILINE_MESSAGE).arg("--allow-empty").assert().success();
+
+    let commit = find_last_commit(&repo)?;
+    assert!(
+        commit
+            .message()
+            .ok_or("no commit message")?
+            .contains("Co-authored-by"),
+        "Did not include the Co-Author for a commit message without comments (hashes)"
+    );
+
+    Ok(())
 }
 
 fn find_last_commit(repo: &Repository) -> Result<Commit, git2::Error> {
