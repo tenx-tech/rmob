@@ -1,6 +1,6 @@
 # Arrr! mob
 
-> A command-line tool fer social codin', written in Rust
+> Shiver me timbers! A command-line tool fer social codin', written in Rust
 
 Includes `Co-authored by` lines in commits for ye automatically when ye collaborate on code. Use when pairin' wit' a buddy or mobbin' wit' yer crew.
 
