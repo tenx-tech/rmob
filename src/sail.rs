@@ -32,6 +32,8 @@ fn save_copirates(copirates: &[String], existing_copirates: CoPirates) -> BoxRes
         let existing_pirate = existing_copirates.copirates.get(pirate).ok_or("Wait what Sally it was right there?")?;
         writeln!(file, "Co-authored-by: {} <{}>", existing_pirate.name, existing_pirate.email)?;
     }
+    
+    println!("{:?}", copirates);
 
     Ok(())
 }
