@@ -3,6 +3,7 @@ use std::path::{PathBuf};
 
 use structopt::StructOpt;
 
+mod copirate;
 mod embark;
 mod prepare_commit_msg;
 mod sail;
