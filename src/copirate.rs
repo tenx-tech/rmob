@@ -5,13 +5,13 @@ use crate::{BoxResult, ACTIVE_COPIRATES_FILE};
 
 #[derive(Deserialize, Debug)]
 pub struct CoPirate {
-    name: String,
-    email: String,
+    pub name: String,
+    pub email: String,
 }
 
 #[derive(Deserialize, Debug)]
 pub struct CoPirates {
-    copirates: HashMap<String, CoPirate>,
+    pub copirates: HashMap<String, CoPirate>,
 }
 
 impl CoPirates {
