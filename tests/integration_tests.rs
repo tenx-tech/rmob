@@ -26,7 +26,7 @@ fn it_works() -> BoxResult {
 
 fn init(dir: &TempDir) -> BoxResult {
     let mut rmob = Command::cargo_bin("rmob")?;
-    rmob.current_dir(dir.path()).arg("init").assert().success();
+    rmob.current_dir(dir.path()).arg("embark").assert().success();
     let hook = dir.path().join(".git/hooks/").join(HOOK_NAME);
     assert!(hook.exists());
 
