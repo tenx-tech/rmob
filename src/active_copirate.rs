@@ -26,7 +26,7 @@ impl ActiveCoPirates {
 
     pub fn save(mut self, copirates: &[&CoPirate]) -> BoxResult<()> {
         for pirate in copirates {
-            writeln!(self.file, "Co-authored-by: {} <{}>", pirate.name, pirate.email)?;
+            writeln!(self.file, "Co-authored-by: {}", pirate)?;
         }
 
         Ok(())

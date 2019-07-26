@@ -4,11 +4,19 @@ use std::fs;
 use std::collections::HashMap;
 use crate::BoxResult;
 use std::path::Path;
+use std::fmt::{Display, Formatter};
+use std::fmt::Result as FmtResult;
 
 #[derive(Deserialize, Debug)]
 pub struct CoPirate {
     pub name: String,
     pub email: String,
+}
+
+impl Display for CoPirate {
+   fn fmt(&self, fmt: &mut Formatter) -> FmtResult {
+       write!(fmt, "{} <{}>", self.name, self.email)
+   }
 }
 
 #[derive(Deserialize, Debug)]
