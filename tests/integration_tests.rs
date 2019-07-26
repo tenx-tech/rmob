@@ -9,7 +9,7 @@ fn it_works() -> BoxResult<()> {
     let dir = tempdir()?;
     let repo = Repository::init(dir.path())?;
 
-    init(&dir)?;
+    embark(&dir)?;
 
     // TODO: stub ~/.git-copirates
     sail(&dir)?;
@@ -23,13 +23,13 @@ fn it_works() -> BoxResult<()> {
     Ok(())
 }
 
-fn init(dir: &TempDir) -> BoxResult<()> {
+fn embark(dir: &TempDir) -> BoxResult<()> {
     let mut rmob = Command::cargo_bin("rmob")?;
     rmob.current_dir(dir.path())
         .arg("embark")
         .assert()
         .success();
-    let hook = dir.path().join(".git/hooks/").join(HOOK_PATH);
+    let hook = dir.path().join(HOOK_PATH);
     assert!(hook.exists());
 
     Ok(())
