@@ -2,18 +2,19 @@ use std::error::Error;
 use std::path::{PathBuf};
 
 use structopt::StructOpt;
+use git2::Repository;
 
 mod copirate;
+mod active_copirate;
 mod embark;
 mod prepare_commit_msg;
 mod sail;
 mod solo;
 
-pub const HOOK_NAME: &str = "prepare-commit-msg";
-pub const COPIRATES_FILE: &str = ".git-copirates";
-pub const ACTIVE_COPIRATES_FILE: &str = ".git/.git-rmob-template";
+pub const HOOK_PATH: &str = ".git/hooks/prepare-commit-msg";
+const COPIRATES_PATH: &str = ".git-copirates";
 
-pub type BoxResult = Result<(), Box<dyn Error>>;
+pub type BoxResult<T> = Result<T, Box<dyn Error>>;
 
 #[derive(StructOpt, Clone, Debug)]
 #[structopt(name = "Rmob", version = "0.1.0", author = "")]
@@ -36,26 +37,27 @@ enum Rmob {
     },
 }
 
-pub fn run() -> BoxResult {
+pub fn run() -> BoxResult<()> {
     let rmob = Rmob::from_args();
 
+    let repo = Repository::discover(".")?;
+    let repo_dir = repo.workdir().ok_or("You're ON LAND, stupid.")?;
+
     match rmob {
-        Rmob::Embark {} => embark::embark()?,
+        Rmob::Embark {} => embark::embark(repo_dir)?,
         Rmob::Sail { copirates } => {
             if copirates == ["solo"] {
-                solo::solo()?
+                solo::solo(repo_dir)?
             } else {
-                sail::sail(&copirates)?
+                sail::sail(&copirates, repo_dir)?
             }
         },
-        Rmob::Solo {} => solo::solo()?,
+        Rmob::Solo {} => solo::solo(repo_dir)?,
         Rmob::PrepareCommitMessage {
             commit_message_file,
         } => {
             prepare_commit_msg::inject_into_commit_message_file(
-                commit_message_file
-                    .to_str()
-                    .ok_or("Ayyyr, what's on that hook laddy?")?,
+                &commit_message_file, repo_dir
             )?;
         }
     }

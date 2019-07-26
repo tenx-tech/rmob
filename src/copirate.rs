@@ -1,7 +1,9 @@
+// Factor out active copirates as a session type with two states: empty and nonempty
 use serde::Deserialize;
 use std::fs;
-use std::collections::{HashMap};
-use crate::{BoxResult, ACTIVE_COPIRATES_FILE};
+use std::collections::HashMap;
+use crate::BoxResult;
+use std::path::Path;
 
 #[derive(Deserialize, Debug)]
 pub struct CoPirate {
@@ -15,10 +17,18 @@ pub struct CoPirates {
 }
 
 impl CoPirates {
-    pub fn empty_copirates_file() -> BoxResult {
-        fs::write(ACTIVE_COPIRATES_FILE, "")?;
+    pub fn open(copirates_path: &Path) -> BoxResult<CoPirates> {
+        let raw_copirates = fs::read_to_string(copirates_path)?;
+        let existing_copirates = serde_json::from_str(&raw_copirates[..])?;
 
-        Ok(())
+        Ok(existing_copirates)
     }
+
+    pub fn get(&self, copirate: &String) -> BoxResult<&CoPirate> {
+        let copirate = self.copirates.get(copirate).ok_or("Shiver me timbers! This be pirate be a stranger around these ports. Hint: Add it to ~/.git-copirates!")?;
+
+        Ok(copirate)
+    }
+
 }
 
