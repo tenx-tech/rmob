@@ -1,9 +1,9 @@
-use std::fs;
-use std::io::prelude::*;
-use crate::BoxResult;
-use std::path::Path;
 use crate::copirate::CoPirate;
+use crate::BoxResult;
+use std::fs;
 use std::fs::OpenOptions;
+use std::io::prelude::*;
+use std::path::Path;
 
 const ACTIVE_COPIRATES_PATH: &str = ".git/.git-rmob-template";
 
@@ -13,6 +13,12 @@ pub struct ActiveCoPirates {
 }
 
 impl ActiveCoPirates {
+    pub fn get(repo_dir: &Path) -> BoxResult<String> {
+        let active_copirates = fs::read_to_string(repo_dir.join(ACTIVE_COPIRATES_PATH))?;
+
+        Ok(active_copirates)
+    }
+
     pub fn create_empty(repo_dir: &Path) -> BoxResult<ActiveCoPirates> {
         let active_copirates_path = repo_dir.join(ACTIVE_COPIRATES_PATH);
         fs::write(&active_copirates_path, "")?;
@@ -31,11 +37,4 @@ impl ActiveCoPirates {
 
         Ok(())
     }
-
-    pub fn get(repo_dir: &Path) -> BoxResult<String> {
-        let active_copirates = fs::read_to_string(repo_dir.join(ACTIVE_COPIRATES_PATH))?;
-
-        Ok(active_copirates)
-    }
 }
-

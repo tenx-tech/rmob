@@ -1,7 +1,7 @@
 //! start sub-command
 
-use crate::{BoxResult};
 use crate::active_copirate::ActiveCoPirates;
+use crate::BoxResult;
 use std::path::Path;
 
 pub fn solo(repo_dir: &Path) -> BoxResult<()> {
@@ -11,5 +11,3 @@ pub fn solo(repo_dir: &Path) -> BoxResult<()> {
 
     Ok(())
 }
-
-

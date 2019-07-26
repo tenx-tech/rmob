@@ -1,11 +1,11 @@
 use std::error::Error;
-use std::path::{PathBuf};
+use std::path::PathBuf;
 
-use structopt::StructOpt;
 use git2::Repository;
+use structopt::StructOpt;
 
-mod copirate;
 mod active_copirate;
+mod copirate;
 mod embark;
 mod prepare_commit_msg;
 mod sail;
@@ -51,14 +51,12 @@ pub fn run() -> BoxResult<()> {
             } else {
                 sail::sail(&copirates, repo_dir)?
             }
-        },
+        }
         Rmob::Solo {} => solo::solo(repo_dir)?,
         Rmob::PrepareCommitMessage {
             commit_message_file,
         } => {
-            prepare_commit_msg::inject_into_commit_message_file(
-                &commit_message_file, repo_dir
-            )?;
+            prepare_commit_msg::inject_into_commit_message_file(&commit_message_file, repo_dir)?;
         }
     }
 

@@ -1,11 +1,14 @@
 //! prepare-commit-msg subcommand
 
-use crate::{BoxResult};
+use crate::active_copirate::ActiveCoPirates;
+use crate::BoxResult;
 use std::fs;
 use std::path::Path;
-use crate::active_copirate::ActiveCoPirates;
 
-pub fn inject_into_commit_message_file(commit_message_file: &Path, repo_dir: &Path) -> BoxResult<()> {
+pub fn inject_into_commit_message_file(
+    commit_message_file: &Path,
+    repo_dir: &Path,
+) -> BoxResult<()> {
     const PATTERN: &str = "\n# ";
 
     let commit_message = fs::read_to_string(commit_message_file)?;

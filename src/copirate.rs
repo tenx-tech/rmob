@@ -1,11 +1,11 @@
 // Factor out active copirates as a session type with two states: empty and nonempty
-use serde::Deserialize;
-use std::fs;
-use std::collections::HashMap;
 use crate::BoxResult;
-use std::path::Path;
-use std::fmt::{Display, Formatter};
+use serde::Deserialize;
+use std::collections::HashMap;
 use std::fmt::Result as FmtResult;
+use std::fmt::{Display, Formatter};
+use std::fs;
+use std::path::Path;
 
 #[derive(Deserialize, Debug)]
 pub struct CoPirate {
@@ -14,9 +14,9 @@ pub struct CoPirate {
 }
 
 impl Display for CoPirate {
-   fn fmt(&self, fmt: &mut Formatter) -> FmtResult {
-       write!(fmt, "{} <{}>", self.name, self.email)
-   }
+    fn fmt(&self, fmt: &mut Formatter) -> FmtResult {
+        write!(fmt, "{} <{}>", self.name, self.email)
+    }
 }
 
 #[derive(Deserialize, Debug)]
@@ -37,6 +37,4 @@ impl CoPirates {
 
         Ok(copirate)
     }
-
 }
-
