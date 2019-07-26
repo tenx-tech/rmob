@@ -1,13 +1,18 @@
 //! prepare-commit-msg subcommand
 
-use crate::{BoxResult, ACTIVE_COPIRATES_FILE};
+use crate::active_copirate::ActiveCoPirates;
+use crate::BoxResult;
 use std::fs;
+use std::path::Path;
 
-pub fn inject_into_commit_message_file(commit_message_file: &str) -> BoxResult {
+pub fn inject_into_commit_message_file(
+    commit_message_file: &Path,
+    repo_dir: &Path,
+) -> BoxResult<()> {
     const PATTERN: &str = "\n# ";
 
     let commit_message = fs::read_to_string(commit_message_file)?;
-    let mob = fs::read_to_string(ACTIVE_COPIRATES_FILE)?;
+    let mob = ActiveCoPirates::get(repo_dir)?;
     // Can I transform that into .unwrap_or_else()
     let comment_pos = if let Some(message) = commit_message.find(PATTERN) {
         message

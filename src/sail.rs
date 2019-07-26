@@ -1,55 +1,37 @@
 //! start sub-command
 
 extern crate dirs;
-use crate::{BoxResult, COPIRATES_FILE, ACTIVE_COPIRATES_FILE};
+use crate::BoxResult;
 
-use std::fs;
-use std::collections::{HashSet};
-use std::fs::OpenOptions;
-use std::io::prelude::*;
+use crate::active_copirate::ActiveCoPirates;
 use crate::copirate::CoPirates;
+use std::path::Path;
 
-pub fn sail(copirates: &[String]) -> BoxResult {
+const COPIRATES_PATH: &str = ".git-copirates";
+
+pub fn sail(copirates: &[String], repo_dir: &Path) -> BoxResult<()> {
     let ship = dirs::home_dir().ok_or("Could not find yer ship oy!")?;
-    let raw_copirates = fs::read_to_string(ship.join(COPIRATES_FILE))?;
-    let existing_copirates: CoPirates = serde_json::from_str(&raw_copirates[..])?;
+    let existing_copirates = CoPirates::open(&ship.join(COPIRATES_PATH))?;
 
-    fail_if_pirate_not_present(copirates, &existing_copirates)?;
-
-    empty_copirates_file()?;
-
-    save_copirates(copirates, existing_copirates)?;
+    save_copirates(copirates, existing_copirates, repo_dir)?;
 
     Ok(())
 }
 
-fn save_copirates(copirates: &[String], existing_copirates: CoPirates) -> BoxResult {
-    let mut file = OpenOptions::new()
-        .append(true)
-        .open(ACTIVE_COPIRATES_FILE)
-        .unwrap();
-    for pirate in copirates {
-        let existing_pirate = existing_copirates.copirates.get(pirate).ok_or("Wait what Sally it was right there?")?;
-        writeln!(file, "Co-authored-by: {} <{}>", existing_pirate.name, existing_pirate.email)?;
-    }
+fn save_copirates(
+    copirates: &[String],
+    existing_copirates: CoPirates,
+    repo_dir: &Path,
+) -> BoxResult<()> {
+    let copirates: Vec<_> = copirates
+        .iter()
+        .map(|initial| existing_copirates.get(initial))
+        .collect::<Result<_, _>>()?;
 
-    println!("{:?}", copirates);
+    let active_copirates = ActiveCoPirates::create_empty(repo_dir)?;
+    active_copirates.save(&copirates)?;
 
-    Ok(())
-}
-
-fn empty_copirates_file() -> BoxResult {
-    fs::write(ACTIVE_COPIRATES_FILE, "")?;
-
-    Ok(())
-}
-
-fn fail_if_pirate_not_present(copirates: &[String], existing_copirates: &CoPirates) -> BoxResult {
-    let existing_copirates: HashSet<&String> = existing_copirates.copirates.keys().collect();
-    let copirates: HashSet<&String> = copirates.into_iter().collect();
-    if !copirates.is_subset(&existing_copirates) {
-        return Err(Box::from("We didn't recognize this pirate's initials. Please add to your ~/.git-copirates file!"));
-    }
+    println!("Sail away!");
 
     Ok(())
 }
