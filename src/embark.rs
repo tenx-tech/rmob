@@ -8,8 +8,7 @@ use std::{fs, io};
 pub fn embark(repo_dir: &Path) -> BoxResult<()> {
     let hook_path = repo_dir.join(HOOK_PATH);
     if hook_path.exists() {
-        // TODO: Want to bail! here, do I need a custom error type for that?
-        panic!("You have an existing prepare-commit-msg hook, which we need to overwrite. Please back it up and remove it!");
+        return Err(Box::from("You have an existing prepare-commit-msg hook, which we need to overwrite. Please back it up and remove it!"));
     } else {
         create_hook(&hook_path)?;
     }
