@@ -1,5 +1,5 @@
-use std::fs::{self, OpenOptions};
-use std::io::prelude::*;
+use std::fs::{self, File, OpenOptions};
+use std::io::Write;
 use std::path::Path;
 
 use crate::copirate::CoPirate;
@@ -9,7 +9,7 @@ const ACTIVE_COPIRATES_PATH: &str = ".git/.git-rmob-template";
 
 #[derive(Debug)]
 pub struct ActiveCoPirates {
-    file: fs::File,
+    file: File,
 }
 
 impl ActiveCoPirates {
