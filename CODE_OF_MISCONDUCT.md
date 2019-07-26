@@ -12,9 +12,9 @@ fool! in the interest o' fosterin' an open an' welcomin' environment, we as cont
 
 ### examples o' unacceptable behavior by participants include:
 
-the use o' borin' language or imagery 
-not 'avin' a beard (anywhere)
-followin' the bloody rules
+* the use o' borin' language or imagery 
+* not 'avin' a beard (anywhere)
+* followin' the bloody rules
 
 ## our responsibilities
 'ahahahahahahahahahahaaaaaaaaaaaaarrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
