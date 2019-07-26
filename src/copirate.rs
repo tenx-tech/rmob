@@ -1,10 +1,11 @@
-use crate::BoxResult;
-use serde::Deserialize;
 use std::collections::HashMap;
-use std::fmt::Result as FmtResult;
-use std::fmt::{Display, Formatter};
+use std::fmt::{Display, Formatter, Result as FmtResult};
 use std::fs;
 use std::path::Path;
+
+use serde::Deserialize;
+
+use crate::BoxResult;
 
 #[derive(Deserialize, Debug)]
 pub struct CoPirate {
@@ -27,13 +28,11 @@ impl CoPirates {
     pub fn open(copirates_path: &Path) -> BoxResult<CoPirates> {
         let raw_copirates = fs::read_to_string(copirates_path)?;
         let existing_copirates = serde_json::from_str(&raw_copirates)?;
-
         Ok(existing_copirates)
     }
 
     pub fn get(&self, copirate: &String) -> BoxResult<&CoPirate> {
         let copirate = self.copirates.get(copirate).ok_or("Shiver me timbers! This be pirate be a stranger around these ports. Hint: Add it to ~/.git-copirates!")?;
-
         Ok(copirate)
     }
 }

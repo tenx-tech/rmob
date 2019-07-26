@@ -1,9 +1,10 @@
 //! prepare-commit-msg subcommand
 
-use crate::active_copirate::ActiveCoPirates;
-use crate::BoxResult;
 use std::fs;
 use std::path::Path;
+
+use crate::active_copirate::ActiveCoPirates;
+use crate::BoxResult;
 
 pub fn inject_into_commit_message_file(
     commit_message_file: &Path,

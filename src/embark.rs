@@ -1,9 +1,10 @@
 //! embark sub-command
 
-use crate::{BoxResult, HOOK_PATH};
 use std::os::unix::fs::OpenOptionsExt;
 use std::path::Path;
 use std::{fs, io};
+
+use crate::{BoxResult, HOOK_PATH};
 
 pub fn embark(repo_dir: &Path) -> BoxResult<()> {
     let hook_path = repo_dir.join(HOOK_PATH);

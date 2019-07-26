@@ -1,11 +1,12 @@
 //! start sub-command
 
-extern crate dirs;
-use crate::BoxResult;
+use std::path::Path;
+
+use dirs;
 
 use crate::active_copirate::ActiveCoPirates;
 use crate::copirate::CoPirates;
-use std::path::Path;
+use crate::BoxResult;
 
 const COPIRATES_PATH: &str = ".git-copirates";
 

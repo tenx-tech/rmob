@@ -11,8 +11,9 @@ mod prepare_commit_msg;
 mod sail;
 mod solo;
 
-pub const HOOK_PATH: &str = ".git/hooks/prepare-commit-msg";
 pub type BoxResult<T> = Result<T, Box<dyn Error>>;
+
+pub const HOOK_PATH: &str = ".git/hooks/prepare-commit-msg";
 
 #[derive(StructOpt, Clone, Debug)]
 #[structopt(name = "Rmob", version = "0.1.0", author = "")]
