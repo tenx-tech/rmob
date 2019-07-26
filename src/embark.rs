@@ -2,7 +2,7 @@
 
 use std::os::unix::fs::OpenOptionsExt;
 use std::path::Path;
-use std::{fs, io};
+use std::{fs, io::Result as IoResult};
 
 use crate::{BoxResult, HOOK_PATH};
 
@@ -17,7 +17,7 @@ pub fn embark(repo_dir: &Path) -> BoxResult<()> {
     Ok(())
 }
 
-pub fn create_hook(hook_file: &Path) -> io::Result<()> {
+pub fn create_hook(hook_file: &Path) -> IoResult<()> {
     let hook_code = "#!/bin/bash
 
 rmob prepare-commit-msg \"$1\"";
@@ -29,7 +29,7 @@ rmob prepare-commit-msg \"$1\"";
 }
 
 // TODO: Make OS-agnostic
-pub fn write_executable(file: &Path, contents: &str) -> io::Result<()> {
+pub fn write_executable(file: &Path, contents: &str) -> IoResult<()> {
     fs::OpenOptions::new()
         .create(true)
         .write(true)
