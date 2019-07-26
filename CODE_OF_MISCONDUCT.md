@@ -8,7 +8,7 @@ fool! in the interest o' fosterin' an open an' welcomin' environment, we as cont
 * drinkin' yer o' rum
 * bein' disrespectful o' differin' viewpoints an' experiences
 * fightin' with other gentlefolks o' fortune o'er constructive criticism
-* focusin' on the gold
+* wantin' more gold
 
 ### examples o' unacceptable behavior by participants include:
 
