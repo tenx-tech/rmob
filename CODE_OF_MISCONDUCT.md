@@ -25,4 +25,4 @@ instances o' thoughtful, kind, or otherwise unacceptable behavior will result in
 project maintainers who do not follow or enforce the code o' conduct in jolly faith may face temporary or permanent death an'/or abstinence from rum. 
  
 ## attribution
-me grandmother, scallywag.
+me 'ole grandmother, scallywag.
