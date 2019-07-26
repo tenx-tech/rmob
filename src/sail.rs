@@ -21,7 +21,7 @@ fn save_copirates(copirates: &[String], existing_copirates: CoPirates, repo_dir:
     let copirates: Vec<_> = copirates.iter().map(| initial| existing_copirates.get(initial)).collect::<Result<_, _>>()?;
 
     let active_copirates = ActiveCoPirates::create_empty(repo_dir)?;
-    active_copirates.save(&copirates[..])?;
+    active_copirates.save(&copirates)?;
 
     println!("Sail away!");
 

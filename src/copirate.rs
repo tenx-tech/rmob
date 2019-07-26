@@ -27,7 +27,7 @@ pub struct CoPirates {
 impl CoPirates {
     pub fn open(copirates_path: &Path) -> BoxResult<CoPirates> {
         let raw_copirates = fs::read_to_string(copirates_path)?;
-        let existing_copirates = serde_json::from_str(&raw_copirates[..])?;
+        let existing_copirates = serde_json::from_str(&raw_copirates)?;
 
         Ok(existing_copirates)
     }
