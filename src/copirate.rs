@@ -21,7 +21,7 @@ impl Display for CoPirate {
 
 #[derive(Deserialize, Debug)]
 pub struct CoPirates {
-    pub copirates: HashMap<String, CoPirate>,
+    copirates: HashMap<String, CoPirate>,
 }
 
 impl CoPirates {
