@@ -1,11 +1,13 @@
 //! start sub-command
 
 extern crate dirs;
-use crate::{BoxResult, COPIRATES_PATH};
+use crate::BoxResult;
 
 use crate::active_copirate::ActiveCoPirates;
 use crate::copirate::CoPirates;
 use std::path::Path;
+
+const COPIRATES_PATH: &str = ".git-copirates";
 
 pub fn sail(copirates: &[String], repo_dir: &Path) -> BoxResult<()> {
     let ship = dirs::home_dir().ok_or("Could not find yer ship oy!")?;

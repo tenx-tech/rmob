@@ -12,8 +12,6 @@ mod sail;
 mod solo;
 
 pub const HOOK_PATH: &str = ".git/hooks/prepare-commit-msg";
-const COPIRATES_PATH: &str = ".git-copirates";
-
 pub type BoxResult<T> = Result<T, Box<dyn Error>>;
 
 #[derive(StructOpt, Clone, Debug)]

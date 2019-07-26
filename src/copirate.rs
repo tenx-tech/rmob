@@ -1,4 +1,3 @@
-// Factor out active copirates as a session type with two states: empty and nonempty
 use crate::BoxResult;
 use serde::Deserialize;
 use std::collections::HashMap;
