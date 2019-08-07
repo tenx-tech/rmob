@@ -2,8 +2,6 @@
 
 use std::path::Path;
 
-use dirs;
-
 use crate::active_copirate::ActiveCoPirates;
 use crate::copirate::CoPirates;
 use crate::BoxResult;
