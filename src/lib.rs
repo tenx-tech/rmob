@@ -1,5 +1,7 @@
 //! Command for including co-authors in Git commits when collaborating on code.
 
+#![forbid(unsafe_code)]
+
 use std::error::Error;
 use std::path::PathBuf;
 
