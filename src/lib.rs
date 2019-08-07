@@ -20,14 +20,14 @@ pub const HOOK_PATH: &str = ".git/hooks/prepare-commit-msg";
 enum Rmob {
     /// Embark on rmob fer this git repo, call this once t' use rmob in yer git repo
     #[structopt(name = "embark")]
-    Embark {},
+    Embark,
     /// Start pairin' or mobbin' by passin' a list of yer co-pirates te sail wit'
     // TODO: Accept only two-character input
     #[structopt(name = "sail")]
     Sail { copirates: Vec<String> },
     /// Sail solo (short fer `rmob sail solo`)
     #[structopt(name = "solo")]
-    Solo {},
+    Solo,
     /// Called from the git hook only
     #[structopt(name = "prepare-commit-msg")]
     PrepareCommitMessage {
@@ -43,7 +43,7 @@ pub fn run() -> BoxResult<()> {
     let repo_dir = repo.workdir().ok_or("You're ON LAND, stupid.")?;
 
     match rmob {
-        Rmob::Embark {} => embark::embark(repo_dir)?,
+        Rmob::Embark => embark::embark(repo_dir)?,
         Rmob::Sail { copirates } => {
             if copirates == ["solo"] {
                 solo::solo(repo_dir)?
@@ -51,7 +51,7 @@ pub fn run() -> BoxResult<()> {
                 sail::sail(&copirates, repo_dir)?
             }
         }
-        Rmob::Solo {} => solo::solo(repo_dir)?,
+        Rmob::Solo => solo::solo(repo_dir)?,
         Rmob::PrepareCommitMessage {
             commit_message_file,
         } => {
