@@ -44,14 +44,9 @@ pub fn run() -> BoxResult<()> {
 
     match rmob {
         Rmob::Embark => embark::embark(repo_dir)?,
-        Rmob::Sail { copirates } => {
-            if copirates == ["solo"] {
-                solo::solo(repo_dir)?
-            } else {
-                sail::sail(&copirates, repo_dir)?
-            }
-        }
         Rmob::Solo => solo::solo(repo_dir)?,
+        Rmob::Sail { ref copirates } if copirates == &["solo"] => solo::solo(repo_dir)?,
+        Rmob::Sail { ref copirates } => sail::sail(copirates, repo_dir)?,
         Rmob::PrepareCommitMessage {
             commit_message_file,
         } => {
