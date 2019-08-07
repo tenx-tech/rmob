@@ -29,7 +29,7 @@ rmob prepare-commit-msg \"$1\"";
 }
 
 // TODO: Make OS-agnostic
-pub fn write_executable(file: &Path, contents: &str) -> IoResult<()> {
+fn write_executable(file: &Path, contents: &str) -> IoResult<()> {
     fs::OpenOptions::new()
         .create(true)
         .write(true)
