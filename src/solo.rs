@@ -1,4 +1,4 @@
-//! start sub-command
+//! Subcommand to disable mobbing for the active Git repository.
 
 use std::path::Path;
 

@@ -1,4 +1,4 @@
-//! start sub-command
+//! Subcommand to begin mobbing on the active Git repository.
 
 use std::path::Path;
 
@@ -8,6 +8,7 @@ use crate::BoxResult;
 
 const COPIRATES_PATH: &str = ".git-copirates";
 
+/// Begin mobbing with the given co-authors on the Git repository located at `repo_dir`.
 pub fn sail(copirates: &[String], repo_dir: &Path) -> BoxResult<()> {
     let ship = dirs::home_dir().ok_or("Could not find yer ship oy!")?;
     let existing_copirates = CoPirates::open(&ship.join(COPIRATES_PATH))?;

@@ -1,3 +1,5 @@
+//! Configuration for all known co-author names and emails.
+
 use std::collections::HashMap;
 use std::fmt::{Display, Formatter, Result as FmtResult};
 use std::fs;
@@ -7,6 +9,7 @@ use serde::Deserialize;
 
 use crate::BoxResult;
 
+/// Represents the details of a single co-author.
 #[derive(Debug, Deserialize, Eq, PartialEq)]
 pub struct CoPirate {
     pub name: String,
@@ -19,18 +22,21 @@ impl Display for CoPirate {
     }
 }
 
+/// Configuration file which assigns convenient two-letter aliases to co-authors.
 #[derive(Debug, Deserialize, Eq, PartialEq)]
 pub struct CoPirates {
     copirates: HashMap<String, CoPirate>,
 }
 
 impl CoPirates {
+    /// Parses the given co-authors file as JSON.
     pub fn open(copirates_path: &Path) -> BoxResult<CoPirates> {
         let raw_copirates = fs::read_to_string(copirates_path)?;
         let existing_copirates = serde_json::from_str(&raw_copirates)?;
         Ok(existing_copirates)
     }
 
+    /// Returns the details of the given co-author, if known.
     pub fn get(&self, copirate: &String) -> BoxResult<&CoPirate> {
         let copirate = self.copirates.get(copirate).ok_or("Shiver me timbers! This be pirate be a stranger around these ports. Hint: Add it to ~/.git-copirates!")?;
         Ok(copirate)

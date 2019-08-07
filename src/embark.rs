@@ -1,4 +1,4 @@
-//! embark sub-command
+//! Subcommand for initializing `rmob` with the given Git repository.
 
 use std::os::unix::fs::OpenOptionsExt;
 use std::path::Path;
@@ -6,6 +6,7 @@ use std::{fs, io::Result as IoResult};
 
 use crate::{BoxResult, HOOK_PATH};
 
+/// Registers the `rmob` Git hook with the Git repository located at `repo_dir`.
 pub fn embark(repo_dir: &Path) -> BoxResult<()> {
     let hook_path = repo_dir.join(HOOK_PATH);
     if hook_path.exists() {
@@ -17,6 +18,7 @@ pub fn embark(repo_dir: &Path) -> BoxResult<()> {
     Ok(())
 }
 
+/// Writes an executable Git hook script to the location at `hook_file`.
 pub fn create_hook(hook_file: &Path) -> IoResult<()> {
     let hook_code = "#!/bin/bash
 

@@ -1,3 +1,5 @@
+//! Command for including co-authors in Git commits when collaborating on code.
+
 use std::error::Error;
 use std::path::PathBuf;
 
@@ -36,6 +38,7 @@ enum Rmob {
     },
 }
 
+/// Executes the `rmob` application.
 pub fn run() -> BoxResult<()> {
     let rmob = Rmob::from_args();
 
