@@ -18,8 +18,7 @@ pub fn embark(repo_dir: &Path) -> BoxResult<()> {
     Ok(())
 }
 
-/// Writes an executable Git hook script to the location at `hook_file`.
-pub fn create_hook(hook_file: &Path) -> IoResult<()> {
+fn create_hook(hook_file: &Path) -> IoResult<()> {
     let hook_code = "#!/bin/bash
 
 rmob prepare-commit-msg \"$1\"";
