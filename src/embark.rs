@@ -1,10 +1,12 @@
-//! embark sub-command
+//! Subcommand for initializing `rmob` with the given Git repository.
 
-use crate::{BoxResult, HOOK_PATH};
 use std::os::unix::fs::OpenOptionsExt;
 use std::path::Path;
-use std::{fs, io};
+use std::{fs, io::Result as IoResult};
 
+use crate::{BoxResult, HOOK_PATH};
+
+/// Registers the `rmob` Git hook with the Git repository located at `repo_dir`.
 pub fn embark(repo_dir: &Path) -> BoxResult<()> {
     let hook_path = repo_dir.join(HOOK_PATH);
     if hook_path.exists() {
@@ -16,7 +18,7 @@ pub fn embark(repo_dir: &Path) -> BoxResult<()> {
     Ok(())
 }
 
-pub fn create_hook(hook_file: &Path) -> io::Result<()> {
+fn create_hook(hook_file: &Path) -> IoResult<()> {
     let hook_code = "#!/bin/bash
 
 rmob prepare-commit-msg \"$1\"";
@@ -28,7 +30,7 @@ rmob prepare-commit-msg \"$1\"";
 }
 
 // TODO: Make OS-agnostic
-pub fn write_executable(file: &Path, contents: &str) -> io::Result<()> {
+fn write_executable(file: &Path, contents: &str) -> IoResult<()> {
     fs::OpenOptions::new()
         .create(true)
         .write(true)
