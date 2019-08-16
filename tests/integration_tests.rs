@@ -1,7 +1,8 @@
+use std::process::Command;
+
 use assert_cmd::prelude::*;
 use git2::{Commit, ObjectType, Repository};
 use rmob::*;
-use std::process::Command;
 use tempfile::{tempdir, TempDir};
 
 #[test]

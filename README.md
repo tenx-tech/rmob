@@ -5,7 +5,7 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg?style=flat-square)](https://www.gnu.org/licenses/gpl-3.0)
 [![Arrr: Arrr](https://img.shields.io/badge/pirate-arr-yellow)]()
 
-Includes `Co-authored by` lines in commits for ye automatically when ye collaborate on code. Use when pairin' wit' a buddy or mobbin' wit' yer crew.
+Includes `Co-authored by` lines in commits for ye automatically when ye collaborate on code. Use when pairin' wit' a matey or mobbin' wit' yer crew.
 
 ## Embark
 
@@ -47,6 +47,6 @@ SUBCOMMANDS:
 ```
 ---
 
-Inspired by the scallywags over at https://github.com/findmypast-oss/git-mob.
+Looted from the scallywags o'er at 'https://github.com/findmypast-oss/git-mob.
 
 Mighty indebted!
