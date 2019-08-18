@@ -23,9 +23,9 @@ pub const HOOK_PATH: &str = ".git/hooks/prepare-commit-msg";
 #[structopt(name = "Rmob", version = "0.1.0", author = "")]
 struct Rmob {
     #[structopt(
-        name = "git-copirates-file",
         default_value = ".git-copirates",
-        env = "GIT_COPIRATES_FILE"
+        env = "GIT_COPIRATES_FILE",
+        long = "git-copirates-file"
     )]
     git_copirates_file: String,
     #[structopt(subcommand)] // Note that we mark a field as a subcommand
