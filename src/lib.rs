@@ -21,7 +21,19 @@ pub const HOOK_PATH: &str = ".git/hooks/prepare-commit-msg";
 
 #[derive(StructOpt, Clone, Debug)]
 #[structopt(name = "Rmob", version = "0.1.0", author = "")]
-enum Rmob {
+struct Rmob {
+    #[structopt(
+        default_value = ".git-copirates",
+        env = "GIT_COPIRATES_FILE",
+        long = "git-copirates-file"
+    )]
+    git_copirates_file: String,
+    #[structopt(subcommand)] // Note that we mark a field as a subcommand
+    cmd: Command,
+}
+
+#[derive(StructOpt, Clone, Debug)]
+enum Command {
     /// Embark on rmob fer this git repo, call this once t' use rmob in yer git repo
     #[structopt(name = "embark")]
     Embark,
@@ -44,15 +56,16 @@ enum Rmob {
 pub fn run() -> BoxResult<()> {
     let rmob = Rmob::from_args();
 
+    let copirates_file = rmob.git_copirates_file;
     let repo = Repository::discover(".")?;
     let repo_dir = repo.workdir().ok_or("You're ON LAND, stupid.")?;
 
-    match rmob {
-        Rmob::Embark => embark::embark(repo_dir)?,
-        Rmob::Solo => solo::solo(repo_dir)?,
-        Rmob::Sail { ref copirates } if copirates == &["solo"] => solo::solo(repo_dir)?,
-        Rmob::Sail { ref copirates } => sail::sail(copirates, repo_dir)?,
-        Rmob::PrepareCommitMessage {
+    match rmob.cmd {
+        Command::Embark => embark::embark(repo_dir)?,
+        Command::Solo => solo::solo(repo_dir)?,
+        Command::Sail { ref copirates } if copirates == &["solo"] => solo::solo(repo_dir)?,
+        Command::Sail { ref copirates } => sail::sail(&copirates_file, copirates, repo_dir)?,
+        Command::PrepareCommitMessage {
             commit_message_file,
         } => {
             prepare_commit_msg::inject_into_commit_message_file(&commit_message_file, repo_dir)?;

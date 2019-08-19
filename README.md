@@ -10,7 +10,7 @@ Includes `Co-authored by` lines in commits for ye automatically when ye collabor
 ## Embark
 
 1. `git clone` this ship
-1. `cargo build` and `cargo install` for now
+1. `cargo build` and `cargo install --path .` for now
 1. Add a `~/.git-copirates` file like this
     ```json
     {

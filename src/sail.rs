@@ -6,12 +6,10 @@ use crate::active_copirate::ActiveCoPirates;
 use crate::copirate::CoPirates;
 use crate::BoxResult;
 
-const COPIRATES_PATH: &str = ".git-copirates";
-
 /// Begin mobbing with the given co-authors on the Git repository located at `repo_dir`.
-pub fn sail(copirates: &[String], repo_dir: &Path) -> BoxResult<()> {
+pub fn sail(copirates_file: &str, copirates: &[String], repo_dir: &Path) -> BoxResult<()> {
     let ship = dirs::home_dir().ok_or("Could not find yer ship oy!")?;
-    let existing_copirates = CoPirates::open(&ship.join(COPIRATES_PATH))?;
+    let existing_copirates = CoPirates::open(&ship.join(copirates_file))?;
 
     save_copirates(copirates, existing_copirates, repo_dir)?;
 

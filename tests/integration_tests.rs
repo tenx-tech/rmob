@@ -3,6 +3,7 @@ use std::process::Command;
 use assert_cmd::prelude::*;
 use git2::{Commit, ObjectType, Repository};
 use rmob::*;
+use std::fs;
 use tempfile::{tempdir, TempDir};
 
 #[test]
@@ -12,7 +13,8 @@ fn it_works() -> BoxResult<()> {
 
     embark(&dir)?;
 
-    // TODO: stub ~/.git-copirates
+    init_git_copirates(&dir)?;
+
     sail(&dir)?;
 
     init_git_repo(&dir)?;
@@ -36,11 +38,31 @@ fn embark(dir: &TempDir) -> BoxResult<()> {
     Ok(())
 }
 
+fn init_git_copirates(dir: &TempDir) -> BoxResult<()> {
+    let copirates = r#"
+        {
+          "copirates": {
+            "cb": {
+              "name": "Charlotte de Berry",
+              "email": "berrydeath@england.pir"
+            }
+          }
+        }
+    "#;
+    let copirates_file = dir.path().join(".git-copirates");
+
+    fs::write(copirates_file, copirates)?;
+
+    Ok(())
+}
+
 fn sail(dir: &TempDir) -> BoxResult<()> {
     let mut rmob = Command::cargo_bin("rmob")?;
     rmob.current_dir(dir.path())
+        .arg("--git-copirates-file")
+        .arg(dir.path().join(".git-copirates"))
         .arg("sail")
-        .arg("ek")
+        .arg("cb")
         .assert()
         .success();
 
