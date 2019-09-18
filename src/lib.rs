@@ -43,9 +43,7 @@ enum CopirateSubcommand {
     },
     /// Removes co-pirate from the list
     #[structopt(name = "remove")]
-    Remove {
-        initials: String,
-    },
+    Remove { initials: String },
 }
 
 #[derive(StructOpt, Clone, Debug)]
@@ -64,7 +62,7 @@ enum Command {
     #[structopt(name = "copirate")]
     Copirate {
         #[structopt(subcommand)]
-        cmd: CopirateSubcommand
+        cmd: CopirateSubcommand,
     },
     /// Called from the git hook only
     #[structopt(name = "prepare-commit-msg")]
@@ -89,8 +87,14 @@ pub fn run() -> BoxResult<()> {
         Command::Sail { ref copirates } => sail::sail(&copirates_file, copirates, repo_dir)?,
         Command::Copirate { ref cmd } => {
             match cmd {
-                CopirateSubcommand::Add { ref initials, ref name, ref email } => copirate::add(&copirates_file, initials, name, email)?,
-                CopirateSubcommand::Remove { ref initials } => copirate::remove(&copirates_file, initials)?,
+                CopirateSubcommand::Add {
+                    ref initials,
+                    ref name,
+                    ref email,
+                } => copirate::add(&copirates_file, initials, name, email)?,
+                CopirateSubcommand::Remove { ref initials } => {
+                    copirate::remove(&copirates_file, initials)?
+                }
             };
         }
 

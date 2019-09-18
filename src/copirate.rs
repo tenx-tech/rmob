@@ -5,7 +5,7 @@ use std::fmt::{Display, Formatter, Result as FmtResult};
 use std::fs;
 use std::path::Path;
 
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 use crate::BoxResult;
 
@@ -33,7 +33,9 @@ impl CoPirates {
     /// Otherwise, opens the existing one.
     pub fn create_or_open(copirates_path: &Path) -> BoxResult<CoPirates> {
         if !copirates_path.exists() {
-            let empty_copirates = CoPirates { copirates: HashMap::new() };
+            let empty_copirates = CoPirates {
+                copirates: HashMap::new(),
+            };
             empty_copirates.save(copirates_path)?;
         }
 
@@ -65,7 +67,9 @@ impl CoPirates {
 
     /// Removes existing copirate
     pub fn remove(&mut self, initials: &str) -> BoxResult<()> {
-        self.copirates.remove(initials).ok_or(format!("Co-pirate with alias '{}' is not found!", initials))?;
+        self.copirates
+            .remove(initials)
+            .ok_or(format!("Co-pirate with alias '{}' is not found!", initials))?;
         Ok(())
     }
 
@@ -84,7 +88,10 @@ pub(crate) fn add(copirates_file: &str, initials: &str, name: &str, email: &str)
     let copirates_path = &ship.join(copirates_file);
     let mut existing_copirates = CoPirates::create_or_open(copirates_path)?;
 
-    let copirate = CoPirate { name: name.to_owned(), email: email.to_owned() };
+    let copirate = CoPirate {
+        name: name.to_owned(),
+        email: email.to_owned(),
+    };
     existing_copirates.add(initials, copirate)?;
     existing_copirates.save(copirates_path)?;
 
