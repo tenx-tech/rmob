@@ -56,20 +56,20 @@ impl CoPirates {
     }
 
     /// Adds copirate by alias
-    pub fn add(&mut self, initials: &str, copirate: CoPirate) -> BoxResult<()> {
-        if !self.copirates.contains_key(initials) {
-            self.copirates.insert(initials.to_owned(), copirate);
+    pub fn add(&mut self, alias: &str, copirate: CoPirate) -> BoxResult<()> {
+        if !self.copirates.contains_key(alias) {
+            self.copirates.insert(alias.to_owned(), copirate);
             Ok(())
         } else {
-            Err(format!("Co-pirate with alias '{}' already exists", initials).into())
+            Err(format!("Co-pirate with alias '{}' already exists", alias).into())
         }
     }
 
     /// Removes existing copirate
-    pub fn remove(&mut self, initials: &str) -> BoxResult<()> {
+    pub fn remove(&mut self, alias: &str) -> BoxResult<()> {
         self.copirates
-            .remove(initials)
-            .ok_or(format!("Co-pirate with alias '{}' is not found!", initials))?;
+            .remove(alias)
+            .ok_or(format!("Co-pirate with alias '{}' is not found!", alias))?;
         Ok(())
     }
 
@@ -83,7 +83,7 @@ impl CoPirates {
 
 /// Adds copirate with specific credentials to copirates file. Creates new copirates file if it
 /// didn't exist before. Won't add another copirate with the same alias
-pub(crate) fn add(copirates_file: &str, initials: &str, name: &str, email: &str) -> BoxResult<()> {
+pub(crate) fn add(copirates_file: &str, alias: &str, name: &str, email: &str) -> BoxResult<()> {
     let ship = dirs::home_dir().ok_or("Could not find yer ship oy!")?;
     let copirates_path = &ship.join(copirates_file);
     let mut existing_copirates = CoPirates::create_or_open(copirates_path)?;
@@ -92,19 +92,19 @@ pub(crate) fn add(copirates_file: &str, initials: &str, name: &str, email: &str)
         name: name.to_owned(),
         email: email.to_owned(),
     };
-    existing_copirates.add(initials, copirate)?;
+    existing_copirates.add(alias, copirate)?;
     existing_copirates.save(copirates_path)?;
 
     Ok(())
 }
 
 /// Removes existing copirate by their alias from the copirates file
-pub(crate) fn remove(copirates_file: &str, initials: &str) -> BoxResult<()> {
+pub(crate) fn remove(copirates_file: &str, alias: &str) -> BoxResult<()> {
     let ship = dirs::home_dir().ok_or("Could not find yer ship oy!")?;
     let copirates_path = &ship.join(copirates_file);
     let mut existing_copirates = CoPirates::open(copirates_path)?;
 
-    existing_copirates.remove(initials)?;
+    existing_copirates.remove(alias)?;
     existing_copirates.save(copirates_path)?;
 
     Ok(())

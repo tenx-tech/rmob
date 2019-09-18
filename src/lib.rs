@@ -37,13 +37,13 @@ enum CopirateSubcommand {
     /// Adds a co-pirate to the list
     #[structopt(name = "add")]
     Add {
-        initials: String,
+        alias: String,
         name: String,
         email: String,
     },
     /// Removes co-pirate from the list
     #[structopt(name = "remove")]
-    Remove { initials: String },
+    Remove { alias: String },
 }
 
 #[derive(StructOpt, Clone, Debug)]
@@ -88,12 +88,12 @@ pub fn run() -> BoxResult<()> {
         Command::Copirate { ref cmd } => {
             match cmd {
                 CopirateSubcommand::Add {
-                    ref initials,
+                    ref alias,
                     ref name,
                     ref email,
-                } => copirate::add(&copirates_file, initials, name, email)?,
-                CopirateSubcommand::Remove { ref initials } => {
-                    copirate::remove(&copirates_file, initials)?
+                } => copirate::add(&copirates_file, alias, name, email)?,
+                CopirateSubcommand::Remove { ref alias } => {
+                    copirate::remove(&copirates_file, alias)?
                 }
             };
         }
