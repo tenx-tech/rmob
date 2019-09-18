@@ -13,7 +13,7 @@ fn it_works() -> BoxResult<()> {
 
     embark(&dir)?;
 
-    init_git_copirates(&dir)?;
+    add_new_copirate(&dir)?;
 
     sail(&dir)?;
 
@@ -38,20 +38,18 @@ fn embark(dir: &TempDir) -> BoxResult<()> {
     Ok(())
 }
 
-fn init_git_copirates(dir: &TempDir) -> BoxResult<()> {
-    let copirates = r#"
-        {
-          "copirates": {
-            "cb": {
-              "name": "Charlotte de Berry",
-              "email": "berrydeath@england.pir"
-            }
-          }
-        }
-    "#;
-    let copirates_file = dir.path().join(".git-copirates");
-
-    fs::write(copirates_file, copirates)?;
+fn add_new_copirate(dir: &TempDir) -> BoxResult<()> {
+    let mut rmob = Command::cargo_bin("rmob")?;
+    rmob.current_dir(dir.path())
+        .arg("--git-copirates-file")
+        .arg(dir.path().join(".git-copirates"))
+        .arg("copirate")
+        .arg("add")
+        .arg("cb")
+        .arg("'Charlotte de Berry'")
+        .arg("'berrydeath@england.pir'")
+        .assert()
+        .success();
 
     Ok(())
 }
