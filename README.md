@@ -11,17 +11,9 @@ Includes `Co-authored by` lines in commits for ye automatically when ye collabor
 
 1. `git clone` this ship
 1. `cargo build` and `cargo install --path .` for now
-1. Add a `~/.git-copirates` file like this
-    ```json
-    {
-      "copirates": {
-        "cb": {
-          "name": "Charlotte de Berry",
-          "email": "berrydeath@england.pir"
-        }
-      }
-    }
-
+1. Add co-pirates by running:
+    ```bash
+    rmob copirate add cb "Charlotte de Berry" "berrydeath@england.pir"
     ```
 1. In your repo, `rmob embark`
 1. `rmob sail` away!
@@ -32,13 +24,17 @@ Rmob 0.1.0
 Arr! Git mobbing in Rust
 
 USAGE:
-    rmob <SUBCOMMAND>
+    rmob [OPTIONS] <SUBCOMMAND>
 
 FLAGS:
     -h, --help       Prints help information
     -V, --version    Prints version information
 
+OPTIONS:
+        --git-copirates-file <git_copirates_file>     [env: GIT_COPIRATES_FILE=]  [default: .git-copirates]
+
 SUBCOMMANDS:
+    copirate              Edit copirates list
     embark                Embark on rmob fer this git repo, call this once t' use rmob in yer git repo
     help                  Prints this message or the help of the given subcommand(s)
     prepare-commit-msg    Called from the git hook only
