@@ -33,6 +33,22 @@ struct Rmob {
 }
 
 #[derive(StructOpt, Clone, Debug)]
+enum CopirateSubcommand {
+    /// Adds a co-pirate to the list
+    #[structopt(name = "add")]
+    Add {
+        initials: String,
+        name: String,
+        email: String,
+    },
+    /// Removes co-pirate from the list
+    #[structopt(name = "remove")]
+    Remove {
+        initials: String,
+    },
+}
+
+#[derive(StructOpt, Clone, Debug)]
 enum Command {
     /// Embark on rmob fer this git repo, call this once t' use rmob in yer git repo
     #[structopt(name = "embark")]
@@ -44,6 +60,12 @@ enum Command {
     /// Sail solo (short fer `rmob sail solo`)
     #[structopt(name = "solo")]
     Solo,
+    /// Edit copirates list
+    #[structopt(name = "copirate")]
+    Copirate {
+        #[structopt(subcommand)]
+        cmd: CopirateSubcommand
+    },
     /// Called from the git hook only
     #[structopt(name = "prepare-commit-msg")]
     PrepareCommitMessage {
@@ -65,6 +87,13 @@ pub fn run() -> BoxResult<()> {
         Command::Solo => solo::solo(repo_dir)?,
         Command::Sail { ref copirates } if copirates == &["solo"] => solo::solo(repo_dir)?,
         Command::Sail { ref copirates } => sail::sail(&copirates_file, copirates, repo_dir)?,
+        Command::Copirate { ref cmd } => {
+            match cmd {
+                CopirateSubcommand::Add { ref initials, ref name, ref email } => copirate::add(&copirates_file, initials, name, email)?,
+                CopirateSubcommand::Remove { ref initials } => copirate::remove(&copirates_file, initials)?,
+            };
+        }
+
         Command::PrepareCommitMessage {
             commit_message_file,
         } => {
