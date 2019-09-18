@@ -13,7 +13,7 @@ Includes `Co-authored by` lines in commits for ye automatically when ye collabor
 1. `cargo build` and `cargo install --path .` for now
 1. Add co-pirates by running:
     ```bash
-    rmob copirate add cb "Charlotte de Berry" "berrydeath@england.pir"
+    rmob copirate enlist cb "Charlotte de Berry" "berrydeath@england.pir"
     ```
 1. In your repo, `rmob embark`
 1. `rmob sail` away!
