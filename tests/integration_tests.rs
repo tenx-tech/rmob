@@ -72,6 +72,22 @@ fn sail(dir: &TempDir) -> BoxResult<()> {
 fn init_git_repo(dir: &TempDir) -> BoxResult<()> {
     Command::new("git")
         .current_dir(dir.path())
+        .arg("config")
+        .arg("user.email")
+        .arg("maryread@1685.com")
+        .assert()
+        .success();
+
+    Command::new("git")
+        .current_dir(dir.path())
+        .arg("config")
+        .arg("user.name")
+        .arg("Mary Read")
+        .assert()
+        .success();
+
+    Command::new("git")
+        .current_dir(dir.path())
         .arg("init")
         .assert()
         .success();
