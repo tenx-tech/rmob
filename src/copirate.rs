@@ -51,7 +51,7 @@ impl CoPirates {
 
     /// Returns the details of the given co-author, if known.
     pub fn get(&self, copirate: &String) -> BoxResult<&CoPirate> {
-        let copirate = self.copirates.get(copirate).ok_or("Shiver me timbers! This be pirate be a stranger around these ports. Hint: Add it to ~/.git-copirates!")?;
+        let copirate = self.copirates.get(copirate).ok_or("Shiver me timbers! This be pirate be a stranger around these ports. Hint: run `rmob copirate add --help`")?;
         Ok(copirate)
     }
 
