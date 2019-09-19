@@ -35,14 +35,14 @@ struct Rmob {
 #[derive(StructOpt, Clone, Debug)]
 enum CopirateSubcommand {
     /// Adds a co-pirate to the list
-    #[structopt(name = "add")]
+    #[structopt(name = "enlist", alias = "add")]
     Add {
         alias: String,
         name: String,
         email: String,
     },
     /// Removes co-pirate from the list
-    #[structopt(name = "remove")]
+    #[structopt(name = "keelhaul", alias = "delete", alias = "remove")]
     Remove { alias: String },
 }
 
