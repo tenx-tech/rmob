@@ -9,6 +9,7 @@ use git2::Repository;
 use structopt::StructOpt;
 
 mod active_copirate;
+mod completions;
 mod copirate;
 mod embark;
 mod prepare_commit_msg;
@@ -64,6 +65,9 @@ enum Command {
         #[structopt(subcommand)]
         cmd: CopirateSubcommand,
     },
+    /// Generates autocompletion config for shell
+    #[structopt(name = "generate-shell-completions")]
+    GenerateShellCompletions { shell: String },
     /// Called from the git hook only
     #[structopt(name = "prepare-commit-msg")]
     PrepareCommitMessage {
@@ -96,6 +100,9 @@ pub fn run() -> BoxResult<()> {
                     copirate::remove(&copirates_file, alias)?
                 }
             };
+        }
+        Command::GenerateShellCompletions { ref shell } => {
+            completions::generate(&mut Rmob::clap(), shell)?
         }
 
         Command::PrepareCommitMessage {
