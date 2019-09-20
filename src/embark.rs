@@ -1,5 +1,6 @@
 //! Subcommand for initializing `rmob` with the given Git repository.
 
+#[cfg(not(windows))]
 use std::os::unix::fs::OpenOptionsExt;
 use std::path::Path;
 use std::{fs, io::Result as IoResult};
