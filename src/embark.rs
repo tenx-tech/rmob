@@ -19,22 +19,34 @@ pub fn embark(repo_dir: &Path) -> BoxResult<()> {
 }
 
 fn create_hook(hook_file: &Path) -> IoResult<()> {
-    let hook_code = "#!/bin/bash
+    let shell_name = if cfg!(not(windows)) { "bash" } else { "sh" };
+    let hook_code = format!(
+        "#!/bin/{}
 
-rmob prepare-commit-msg \"$1\"";
+rmob prepare-commit-msg \"$1\"",
+        shell_name
+    );
 
-    write_executable(hook_file, hook_code)?;
+    write_executable(hook_file, &hook_code)?;
 
     println!("Success!");
     Ok(())
 }
 
-// TODO: Make OS-agnostic
 fn write_executable(file: &Path, contents: &str) -> IoResult<()> {
-    fs::OpenOptions::new()
-        .create(true)
-        .write(true)
-        .mode(0o775)
-        .open(file)?;
-    fs::write(file, contents)
+    #[cfg(not(windows))]
+    {
+        fs::OpenOptions::new()
+            .create(true)
+            .write(true)
+            .mode(0o775)
+            .open(file)?;
+    }
+
+    #[cfg(windows)]
+    {
+        fs::OpenOptions::new().create(true).write(true).open(file)?;
+    }
+
+    fs::write(&file, contents)
 }
