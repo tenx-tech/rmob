@@ -13,16 +13,18 @@ Includes `Co-authored by` lines in commits for ye automatically when ye collabor
 ## Embark
 
 1. `git clone` this ship
-1. `cargo build` and `cargo install --path .` for now
-1. Add co-pirates by running:
+2. Install `rmob` on your machine using one of the commands below:
+   * Standard: `cargo install --path .`
+   * Nix: `nix-env -iA package -f .`
+3. Add co-pirates by running:
     ```bash
     rmob copirate enlist cb "Charlotte de Berry" "berrydeath@england.pir"
     ```
-1. In your repo, `rmob embark`
-1. `rmob sail` away!
+4. In your repo, `rmob embark`
+5. `rmob sail` away!
 
 ---
-```
+```text
 Rmob 0.1.0
 Arr! Git mobbing in Rust
 
