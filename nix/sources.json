@@ -1,4 +1,17 @@
 {
+    "cargo2nix": {
+        "branch": "master",
+        "description": "Build Rust crates effortlessly with Nix",
+        "homepage": "",
+        "owner": "tenx-tech",
+        "repo": "cargo2nix",
+        "rev": "5c461f02688f59f5c7efba80f61b62a827ccf1d3",
+        "sha256": "14dsx802mjzjjfb6nhsqj33f9p0l1vk5wjrzjm3yiffxab1j6d3b",
+        "type": "tarball",
+        "url": "https://github.com/tenx-tech/cargo2nix/archive/5c461f02688f59f5c7efba80f61b62a827ccf1d3.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz",
+        "version": "v0.8.2"
+    },
     "niv": {
         "branch": "master",
         "description": "Easy dependency management for Nix projects",
